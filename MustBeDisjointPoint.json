@@ -1,0 +1,46 @@
+{
+    "id": "MustBeDisjointPoint",
+    "name": "Must Be Disjoint",
+    "description": [ 
+        "<img src=\"@@@_d/must_not_overlap.png\">\n",
+        "Requires that points be separated spatially from other points in the same",
+		"feature class (or subtype).",
+        "Any points that overlap are errors.",
+        "This is useful for ensuring that points are not coincident or duplicated",
+        "within the same feature class, such as in layers of cities,",
+        "parcel lot ID points, wells, or streetlamp poles",
+        "such as land cover or landform type."
+    ],
+    "actions" : {
+        "CreateFeature": {
+            "name" : "Create feature",
+            "description": [ 
+                "The Create Feature fix creates a new polygon feature out of",
+                "the error shape and removes the portion of overlap from each",
+                "of the features, causing the error to create a planar",
+                "representation of the feature geometry.\n",
+                "This fix can be applied to one or more selected Must Not Overlap errors."
+            ]
+        },
+        "Subtract": {
+            "name" : "Subtract",
+            "description": [ 
+                "The Subtract fix removes the overlapping portion of geometry",
+                "from each feature that is causing the error and leaves a gap",
+                "or void in its place. This fix can be applied to one or more",
+                "selected Must Not Overlap errors."
+            ]
+        },
+        "Merge": {
+            "name" : "Merge",
+            "description": [ 
+                "The Merge fix adds the portion of overlap from one feature",
+                "and subtracts it from the others that are violating the rule.",
+                "You need to pick the feature that receives the portion of",
+                "overlap using the Merge dialog box.",
+                "This fix can be applied to one Must Not Overlap error only."
+            ]
+        }
+    }
+}
+
