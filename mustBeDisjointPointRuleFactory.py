@@ -17,7 +17,7 @@ from gvsig import logger
 from gvsig import LOGGER_WARN,LOGGER_INFO,LOGGER_ERROR
 
 from org.gvsig.topology.lib.api import TopologyLocator
-from mustBeDisjointPointRule import MpoustBeDisjointPointRule
+from mustBeDisjointPointRule import MustBeDisjointPointRule
 
 
 class MustBeDisjointPointRuleFactory(AbstractTopologyRuleFactory):
@@ -40,6 +40,7 @@ def selfRegister():
     try:
       manager = TopologyLocator.getTopologyManager()
       manager.addRuleFactories(MustBeDisjointPointRuleFactory())
+      print "added rule"
     except Exception as ex:
       logger("Can't register topology rule from MustBeDisjointPointRuleFactory."+str(ex), LOGGER_WARN)
 

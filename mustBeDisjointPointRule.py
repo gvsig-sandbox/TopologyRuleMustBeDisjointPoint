@@ -13,6 +13,8 @@ from gvsig import LOGGER_WARN,LOGGER_INFO,LOGGER_ERROR
 
 from org.gvsig.topology.lib.api import TopologyLocator
 
+from org.gvsig.expressionevaluator import ExpressionEvaluatorLocator
+
 class MustBeDisjointPointRule(AbstractTopologyRule):
   
   geomName = None
