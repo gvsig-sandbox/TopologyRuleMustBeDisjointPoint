@@ -21,13 +21,14 @@ class MustBeDisjointPointRule(AbstractTopologyRule):
   expression = None
   expressionBuilder = None
   
-  def __init__(self, plan, factory, tolerance, dataSet1):
+  def __init__(self, plan, factory, tolerance, dataSet1, dataSet2):
     #        TopologyPlan plan,
     #        TopologyRuleFactory factory,
     #        double tolerance,
     #        String dataSet1
+    #        String dataSet2
     
-    AbstractTopologyRule.__init__(self, plan, factory, tolerance, dataSet1)
+    AbstractTopologyRule.__init__(self, plan, factory, tolerance, dataSet1, dataSet2)
     #self.addAction(CreateFeatureAction())
     #self.addAction(MergeAction())
     #self.addAction(SubtractAction())
@@ -36,44 +37,51 @@ class MustBeDisjointPointRule(AbstractTopologyRule):
     #SimpleTaskStatus taskStatus, 
     #TopologyReport report, 
     #Feature feature1
-    
+
     try:
       logger("tak", LOGGER_INFO)
+      store2 = self.getDataSet2().getFeatureStore()
+      tolerance = self.getTolerance()
+      #logger("1", LOGGER_INFO)
+      
       if (self.expression == None):
         manager = ExpressionEvaluatorLocator.getManager()
         self.expression = manager.createExpression()
         self.expressionBuilder = manager.createExpressionBuilder()
-        self.geomName = feature1.getType().getDefaultGeometryAttributeName()
+        self.geomName = store2.getDefaultFeatureType().getDefaultGeometryAttributeName()
       
       point = feature1.getDefaultGeometry()
+      pointTolerance = point.buffer(tolerance) #polygon
+      
       if( point==None ):
         return
       #logger("1", LOGGER_INFO)
       
-      theDataSet = self.getDataSet1()
+      theDataSet1 = self.getDataSet1()
+      theDataSet2 = self.getDataSet2()
       #logger("2", LOGGER_INFO)
-      if theDataSet.getSpatialIndex() != None:
+      if theDataSet2.getSpatialIndex() != None:
         #logger("if", LOGGER_INFO)
-        for reference in theDataSet.query(point):
+        for reference in theDataSet2.query(point):
             #FeatureReference reference
             # Misma feature
             #logger("ref"+str(reference), LOGGER_INFO)
             if (reference.equals(feature1.getReference())):
               continue;
             
-            feature = reference.getFeature()
-            otherPoint = feature.getDefaultGeometry()
-            if (otherPoint!=None and not point.disjoint(otherPoint)):
-              error = point
+            feature2 = reference.getFeature()
+            otherPoint = feature2.getDefaultGeometry()
+            if (otherPoint!=None and not pointTolerance.disjoint(otherPoint)):
+              error = pointTolerance.intersection(otherPoint)
               report.addLine(self,
-                theDataSet,
-                None,
+                theDataSet1,
+                theDataSet2,
                 point,
                 error,
                 feature1.getReference(),
-                None,
+                feature2.getReference(),
                 False,
-                "The point overlay with others."
+                "The point is not disjoint."
               )
               break
             
@@ -89,7 +97,7 @@ class MustBeDisjointPointRule(AbstractTopologyRule):
             )
           ).toString()
         )
-        feature = theDataSet.findFirst(self.expression)
+        feature = theDataSet2.findFirst(self.expression)
         if feature != None:
             otherPoint = feature.getDefaultGeometry()
             error = None
@@ -97,14 +105,14 @@ class MustBeDisjointPointRule(AbstractTopologyRule):
               error = point.difference(otherPoint)
             
             report.addLine(self,
-              theDataSet,
-              None,
+              theDataSet1,
+              theDataSet2,
               point,
               error,
               feature1.getReference(),
-              None,
+              feature2.getReference(),
               False,
-              "The point overlay with others."
+              "The point is not disjoint."
             )
         logger("end", LOGGER_INFO)
     except: # Exception as ex:
