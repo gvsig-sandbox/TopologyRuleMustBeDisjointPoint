@@ -13,14 +13,14 @@ from org.gvsig.topology.lib.api import ExecuteTopologyRuleActionException
 
 #from mustBeDisjointPointRuleFactory import MustBeDisjointPointRuleFactory
 
-class DeletePoint(AbstractTopologyRuleAction):
+class DeletePointAction(AbstractTopologyRuleAction):
 
   def __init__(self):
     AbstractTopologyRuleAction.__init__(
       self,
       "MustBeDisjointPoint", #MustBeDisjointPointRuleFactory.NAME,
-      "DeletePoint",
-      "Delete Point",
+      "DeletePointAction",
+      "Delete Point Action",
       ""#CAMBIAR
     )
   
@@ -41,5 +41,5 @@ class DeletePoint(AbstractTopologyRuleAction):
 
 def main(*args):
 
-    c = DeletePoint()
+    c = DeletePointAction()
     pass

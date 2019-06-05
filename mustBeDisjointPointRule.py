@@ -15,7 +15,7 @@ from org.gvsig.topology.lib.api import TopologyLocator
 
 from org.gvsig.expressionevaluator import ExpressionEvaluatorLocator
 
-from DeletePoint import DeletePoint
+from DeletePointAction import DeletePointAction
 
 
 class MustBeDisjointPointRule(AbstractTopologyRule):
@@ -32,7 +32,7 @@ class MustBeDisjointPointRule(AbstractTopologyRule):
     #        String dataSet2
     
     AbstractTopologyRule.__init__(self, plan, factory, tolerance, dataSet1, dataSet2)
-    self.addAction(DeletePoint())
+    self.addAction(DeletePointAction())
   
   def check(self, taskStatus, report, feature1):
     #SimpleTaskStatus taskStatus, 
