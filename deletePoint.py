@@ -2,6 +2,10 @@
 
 import gvsig
 from org.gvsig.topology.lib.spi import AbstractTopologyRuleAction
+import sys
+
+from gvsig import logger
+from gvsig import LOGGER_WARN,LOGGER_INFO,LOGGER_ERROR
 
 #from addons.TopologyRuleMustNotOverlapPolygon.mustNotOverlapPolygonFactory import MustNotOverlapPolygonRuleFactory
 #from mustNotOverlapPolygonFactory import MustNotOverlapPolygonRuleFactory
@@ -19,15 +23,21 @@ class DeletePoint(AbstractTopologyRuleAction):
       "Delete Point",
       ""#CAMBIAR
     )
-  def execute(rule, line, parameters):
-    #TopologyRule rule, TopologyReportLine line, DynObject parameters) {
+  
+  logger("1", LOGGER_INFO)
+  def execute(self, rule, line, parameters):
+    #TopologyRule rule, TopologyReportLine line, DynObject parameters
     try:
-      #DOING
+    
+      #logger("2", LOGGER_INFO)
+      dataSet = rule.getDataSet1()
+      dataSet.delete(line.getFeature1())
       
-      pass
-    except Exception as ex:
+    except:
+      ex = sys.exc_info()[1]
+      print "Error", ex.__class__.__name__, str(ex)
       #throw new ExecuteTopologyRuleActionException(ex);
-      raise ExecuteTopologyRuleActionException(ex)
+      #raise ExecuteTopologyRuleActionException(ex)
 
 def main(*args):
 
