@@ -29,12 +29,11 @@ class MustBeDisjointPointRuleFactory(AbstractTopologyRuleFactory):
       "MustBeDisjointPoint",
       "Must Be Disjoint", 
       "Requires that points be separated spatially from other points in the same feature class. The overlapping points are errors. This rule ensures that points are not coincident or duplicated within the same feature class", 
-      ListBuilder().add(Geometry.TYPES.POINT).add(Geometry.TYPES.MULTIPOINT).asList(),
       ListBuilder().add(Geometry.TYPES.POINT).add(Geometry.TYPES.MULTIPOINT).asList()
       )
   def createRule(self, plan, dataSet1, dataSet2, tolerance):
     #TopologyPlan plan, String dataSet1, String dataSet2, double tolerance
-    rule = MustBeDisjointPointRule(plan, self, tolerance, dataSet1, dataSet2)
+    rule = MustBeDisjointPointRule(plan, self, tolerance, dataSet1)
     return rule
 
 def selfRegister():

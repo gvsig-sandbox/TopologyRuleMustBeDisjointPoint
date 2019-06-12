@@ -3,30 +3,17 @@
     "name": "Must Be Disjoint",
     "description": [ 
         "<img src=\"@@@_d/must_be_disjoint.png\">\n",
-        "Requires that points be separated spatially from other points in the same",
-		"feature class (or subtype).",
-        "Any points that overlap are errors.",
-        "This is useful for ensuring that points are not coincident or duplicated",
-        "within the same feature class."
+        "Requires that points be spatially separated from other points in the same",
+		"layer, so any point that overlaps is an error.",
+        "Therefore, this rule is useful to ensure that points are not coincident",
+        "or duplicate."
     ],
     "actions" : {
         "DeletePoint": {
             "name" : "Delete Point",
             "description": [ 
-                "",
-                ""
-            ]
-        },
-        "": {
-            "name" : "",
-            "description": [ 
-                ""
-            ]
-        },
-        "": {
-            "name" : "",
-            "description": [ 
-                ""
+                "This action will eliminate the points that are not spatially separated",
+                "taking into account the tolerance established in a previous step."
             ]
         }
     }
