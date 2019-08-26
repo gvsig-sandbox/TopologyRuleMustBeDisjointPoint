@@ -37,10 +37,7 @@ class MustBeDisjointPointRule(AbstractTopologyRule):
     #Feature feature1
 
     try:
-      #logger("si", LOGGER_INFO)
-      tolerance = self.getTolerance()
-      #logger("1", LOGGER_INFO)
-      
+
       if (self.expression == None):
         manager = ExpressionEvaluatorLocator.getManager()
         self.expression = manager.createExpression()
@@ -48,31 +45,26 @@ class MustBeDisjointPointRule(AbstractTopologyRule):
         self.geomName = feature1.getType().getDefaultGeometryAttributeName()
 
       point = feature1.getDefaultGeometry()
+      tolerance = self.getTolerance()
       pointTolerance = point.buffer(tolerance)
 
-      if(point==None):
+      if point==None:
         return
 
-      if(pointTolerance==None):
+      if pointTolerance==None:
         pointTolerance = point
 
-      #logger("1", LOGGER_INFO)
       theDataSet = self.getDataSet1()
-      #logger("2", LOGGER_INFO)
       if theDataSet.getSpatialIndex() != None:
-        #logger("if", LOGGER_INFO)
-
         for reference in theDataSet.query(pointTolerance):
-            #print len(Fset)
             #FeatureReference reference
             # Same feature
-            #logger("ref"+str(reference), LOGGER_INFO)
-            if (reference.equals(feature1.getReference())):
+            if reference.equals(feature1.getReference()):
               continue;
             
             feature = reference.getFeature()
             otherPoint = feature.getDefaultGeometry()
-            if (otherPoint!=None and not pointTolerance.disjoint(otherPoint)):
+            if otherPoint!=None and not pointTolerance.disjoint(otherPoint):
               error = point
               report.addLine(self,
                 theDataSet,
@@ -81,8 +73,11 @@ class MustBeDisjointPointRule(AbstractTopologyRule):
                 error,
                 feature1.getReference(),
                 None,
+                -1,
+                -1,
                 False,
-                "The point is not disjoint."
+                "The point is not disjoint.",
+                ""
               )
               break
             
@@ -101,7 +96,6 @@ class MustBeDisjointPointRule(AbstractTopologyRule):
         feature = theDataSet.findFirst(self.expression)
         if feature != None:
             otherPoint = feature.getDefaultGeometry()
-            #logger("disjoint", LOGGER_INFO)
             error = None
             if otherPoint != None:
               error = point
@@ -113,12 +107,13 @@ class MustBeDisjointPointRule(AbstractTopologyRule):
               error,
               feature1.getReference(),
               None,
+              -1,
+              -1,
               False,
               "The point is not disjoint."
+              ""
             )
-        #logger("end", LOGGER_INFO)
-    except: # Exception as ex:
-      #logger("2 Can't check feature."+str(ex), LOGGER_WARN)
+    except:
       ex = sys.exc_info()[1]
       logger("Can't execute rule. Class Name:" + ex.__class__.__name__ + " Except:" + str(ex))
     finally:
